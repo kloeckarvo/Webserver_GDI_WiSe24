@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  gis_database:
+    image: postgis/postgis:16-3.4
+    container_name: gis_database
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: geodjango
+      POSTGRES_USER: geodjango_user
+      POSTGRES_PASSWORD: geodjango_pw
+    volumes:
+      - gisdata:/var/lib/postgresql/data
+    command: bash -c "apt-get update && apt-get install -y --no-install-recommends postgresql-16-ogr-fdw && apt-get update && apt-get install -y pgagent && docker-entrypoint.sh postgres"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U geodjango_user -d geodjango"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: django_web
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      gis_database:
+        condition: service_healthy
+
+volumes:
+  gisdata:
+    name: gisdata
