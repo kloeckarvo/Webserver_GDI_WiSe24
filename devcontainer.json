@@ -19,5 +19,13 @@
         "ms-azuretools.vscode-docker"
     ],
     "postCreateCommand": "pip install --no-cache-dir -r requirements.txt",
-    "remoteUser": "root"
-}
+    "remoteUser": "root",
+    "customizations": {
+        "jetbrains": {
+            "settings": {
+                "Docker:app:DockerSettings.dockerComposePath": "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe",
+                "Docker:app:DockerSettings.dockerPath": "C:\\Program Files\\Docker\\Docker\\resources\\bin\\docker.exe",
+                "org.jetbrains.plugins.terminal:app:TerminalOptionsProvider.myShellPath": "C:\\WINDOWS\\system32\\cmd.exe"
+            }
+        }
+    },}
